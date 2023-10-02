@@ -57,7 +57,8 @@ main(int argc, char *argv[])
   /*
    * Create a socket
    */
-  if ((s = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0) {
+  // set nonblock so we can poll easily for connections
+  if ((s = socket(PF_INET, SOCK_STREAM | SOCK_NONBLOCK, IPPROTO_TCP)) < 0) {
     fprintf(stderr, "%s: socket - %s\n", argv[0], strerror(errno));
     exit(1);
   }
