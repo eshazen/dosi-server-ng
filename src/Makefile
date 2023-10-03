@@ -6,8 +6,9 @@ clean:
 	rm -f server
 
 main.o: main.cpp TcpServer.hh
-
 TcpServer.o: TcpServer.cpp TcpServer.hh
-
-server: TcpServer.o main.o
-	g++ -o server TcpServer.o main.o
+server.o: server.cpp
+interactive_test: TcpServer.o main.o
+	g++ -o $@ $^
+server: TcpServer.o server.o
+	g++ -o $@ $^
