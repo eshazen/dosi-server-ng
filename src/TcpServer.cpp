@@ -1,3 +1,20 @@
+// TcpServer.cc - simple TCP server for DOSI
+//
+// User must call polling functions to check for activity
+//
+// TcpServer( int port)            - create socket, bind, listen
+// int CheckConnect()              - check for connection
+//                                   return 0 if none, else connection number
+// int CheckData()                 - check for incoming data, store in local buffer
+//                                   return:  >0 - size of data
+//                                            =0 - connection closed
+//                                            <0 - no data seen, try again
+//                                   buffer freed on subsequent calls
+// void *GetData()                 - returns a pointer to data or NULL if none
+// int GetDataSize()               - returns size of data in buffer
+// int SendData( void *d, int n, bool b)
+//                                 - send n bytes of data from d
+//                                 - b means send binary data with header
 
 #include "TcpServer.hh"
 
@@ -96,11 +113,13 @@ int TcpServer::CheckData() {
 
   if( len > 0) {
       ++line;
-      if (len >= MAX_LINE) {
-	len = MAX_LINE - 1;
+      if (len >= TCP_RECV_CHUNK) {
+	len = TCP_RECV_CHUNK - 1;
       }
       buf[len] = 0;
       if( debug) printf("TcpServer::CheckData() RECV: \"%s\"\n", buf);
+
+      
   }
 
   if( len == 0) {
@@ -115,4 +134,25 @@ int TcpServer::CheckData() {
   }
 
   return len;
+}
+
+//
+// return buffer address
+//
+void *TcpServer::GetData() {
+  return (void *)buf;
+}
+
+//
+// return buffer size
+//
+int TcpServer::GetDataSize() {
+  return buf_count;
+}
+
+//
+// send data
+//
+int TcpServer::SendData( void *data, int count, int binary) {
+  return -1;
 }
