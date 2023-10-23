@@ -27,9 +27,18 @@ There are 3 categories of commands:  those which modify the
 configuration, those which act immediately on the hardware, and the
 "GO" command to start a run.
 
-At the very least, we need a parser which can check a command for
-validity and identify which category the command falls in.
-Additionally
+A possible scheme:  provide a single method which parses the command,
+and selectively takes action on the 3 categories, based on pointers
+passed:
+
+1.  Configuration modified if a `DosiConfig` is passed
+2.  Hardware updated if `DOSI` is passed
+3.  Go triggered if `EnableGo` boolean is true
+
+This allows for testing with no action taken or in simulation.
+
+Finally, each command should return an acknowledgement with at minimum
+'OK' and 'Error' options.
 
 ## Code / Class structure in old server
 

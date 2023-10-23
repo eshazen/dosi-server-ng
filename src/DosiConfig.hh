@@ -6,28 +6,37 @@
 #ifndef DOSI_CONFIG_HH
 #define DOSI_CONFIG_HH
 
+#include <cstdint>
+
 // code types of configuration commands
-typedef enum {
+enum cmd_type_t {
   CMD_TYPE_CONFIG,		// configuration commands, set internal states
   CMD_TYPE_GO,			// uniquely the "G" command to start a run
   CMD_TYPE_LASER,		// laser enable/disable functions
   CMD_TYPE_GPIO,		// misc GPIO (APD select, spectrometer, etc)
   CMD_TYPE_ERROR		// error in parsed command
-} cmd_type_t;
+};
 
-typedef enum {
-  SINGLE_TONE=0,
-  TIME=1, 
-  REIM=2, 
-  AMPPHASE = 3, 
-  CAL_REIM = 4, 
-  CAL_AMPPHASE = 5, 
-  OP = 6, 
-  CHROME = 7,
-  DUAL_APD = 8,
-  DUAL_APD_TRIGGER = 9,
-  DELAY_TRIGGER = 10,
-} process_mode_t;
+enum pgaMode_t {
+  CONST = 30,
+  LINEAR = 31,
+  LOG = 32,
+  PTBYPT = 33
+};
+
+enum process_mode_t {
+  SINGLE_TONE=10,
+  TIME=11, 
+  REIM=12, 
+  AMPPHASE =13, 
+  CAL_REIM =14, 
+  CAL_AMPPHASE =15, 
+  OP =16, 
+  CHROME =17,
+  DUAL_APD =18,
+  DUAL_APD_TRIGGER =19,
+  DELAY_TRIGGER = 20,
+};
 
 
 class DosiConfig {
@@ -35,11 +44,8 @@ class DosiConfig {
 public:
   DosiConfig();			  // constructor
   ~DosiConfig();		  // destructor
-  int parseCommandPacket( char* buffer);
 
-private:
   // the server state
-
   uint32_t minFreq;
   uint32_t maxFreq;
   uint32_t step;
@@ -64,10 +70,6 @@ private:
 
   bool debug = false;
 };
-
-
-cmd_type_t checkCommandType( char *buffer);
-
 
 
 #endif  

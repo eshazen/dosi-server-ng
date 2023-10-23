@@ -4,3 +4,7 @@
 DosiConfig::DosiConfig() {
   
 }
+
+DosiConfig::~DosiConfig() {
+
+}
