@@ -52,6 +52,7 @@ class ADC{
 		void writeAXIRegister(uint8_t reg,uint32_t data);
 		bool gainSerialDone();
 
+		virtual ~ADC()
 
 	private:
 		uint8_t extGainA;		//PGA870 gain for channel A

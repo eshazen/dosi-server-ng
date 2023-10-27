@@ -1,7 +1,46 @@
 #include "dds_config.hh"
 
 DDS_Config::DDS_Config(int uio){
-	
+	Board = UIO;
+	if (UIO > 4 || UIO < 0) {
+		fprintf(stderr,"UIO must be between 0 and 4");
+	}
+	char UIDev[15];
+	sprintf(UIDev, "/dev/uio%d",UIO);
+	fprintf(stderr,"%s\n", UIDev);
+	int fdUIO = open(UIDev, O_RDWR|O_SYNC);
+	//setup memory mappings
+	AXI = (DDS::HW*) mmap(NULL,
+			sizeof(DDS::HW),
+			PROT_READ|PROT_WRITE,
+			MAP_SHARED,
+			fdUIO,
+			0x0);  //This may need some page size rounding for safety, but for now the AXI devices are easily on page boundaries. 
+	frequency[0] = 50.0;
+	frequency[1] = 50.0;
+	phase[0] = 0;
+	phase[1] = 0;
+	amplitude[0] = 0x3FFF;
+	amplitude[1] = 0x3FFF;
+	sleep = 0;
+	powerdown = 0;
+	sincFilt = 0;
+	refClkOut = 0;
+	PLLCurrent = 0x02;
+	refClkOut = 0;
+	refClkDivider = 1;
+	refClkMultiplier = 40;
+	sysClk = (uint16_t)(refClkMultiplier * DDS_OSC);
+	VCO = 0x05;
+	ftw[0] = frequency2ftw(frequency[0],sysClk);
+	pow[0] = phase2pow(phase[0]);
+	ftw[1] = frequency2ftw(frequency[1],sysClk);
+	pow[1] = phase2pow(phase[1]);
+	actualFreq[0] = ftw2frequency(ftw[0],sysClk);
+	actualFreq[1] = ftw2frequency(ftw[1],sysClk);
+	chipSelect = false;
+	getConfigData();
+	profileCMD = getProfileCMD(false);	
 }
 
 bool DDS::serialDone() {
@@ -146,3 +185,6 @@ uint16_t DDS::phase2pow(float p){
 	return po;
 }
 
+DDS_Config::~DDS_Config(){
+	fprintf(stderr, "destructing DDS_config class");
+}

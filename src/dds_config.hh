@@ -15,7 +15,6 @@
 
 class DDS_Config{
 	public:
-		DDS_Config();
 		DDS_Config(int uio);
 		double GetActualFreq(uint32_t fword);
 		void getConfigData();
@@ -30,15 +29,17 @@ class DDS_Config{
 		void setChipSelect(bool cs);
 		bool serialDone();
 
+		virtual ~DDS_Config();
+
 	private:
-		struct HW {           //AXI Registers
+		struct HW {               //AXI Registers
 			uint32_t reg[4];
 		};
-		volatile HW *AXI;     //Location of AXI registers
-		float frequency[2];          //desired frequency
-		double actualFreq[2];        //Actual frequency output
-		float phase[2];              //Desired phase
-		uint16_t amplitude[2];       //Amplitude
+		volatile HW *AXI;         //Location of AXI registers
+		float frequency[2];       //desired frequency
+		double actualFreq[2];     //Actual frequency output
+		float phase[2];           //Desired phase
+		uint16_t amplitude[2];    //Amplitude
 		bool sincFilt;            //Use the sinc filter?
 		bool refClkOut;           //Output the reference clock?
 		uint8_t PLLCurrent;       //How much current to use in the PLL detector

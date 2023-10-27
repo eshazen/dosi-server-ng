@@ -24,3 +24,6 @@ uint32_t GPIO::readGPIO(int address) {
 	return AXI->reg[address];
 }
 
+GPIO::~GPIO(){
+	fprintf(stderr, "destructing GPIO class");
+}

@@ -370,4 +370,6 @@ void ADC::writeRegister(uint8_t Address, uint8_t Data) {
 	AXI->reg[0] = getReg0();
 }
 
-
+ADC::~ADC(){
+	fprintf(stderr, "destructing ADC class");
+}
