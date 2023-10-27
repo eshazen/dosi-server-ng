@@ -4,11 +4,11 @@
  *
  *Opens communication with the DDS Boards
 */
-DDS_hl::DDS_hl(int UIO0, int UIO1, int UIO2):
-	DDS0(UIO0),
-	DDS1(UIO1),
-	DDS2(UIO2){
-	DDS0.IOReset();
+DDS_hl::DDS_hl():
+	DDS0(DDS_PORT0),
+	DDS1(DDS_PORT1),
+	DDS2(DDS_PORT2){
+	DDS0.IOReset(); //all DDS are reset
 }
 
 /*

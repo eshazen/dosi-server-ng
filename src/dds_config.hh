@@ -15,12 +15,12 @@
 
 class DDS_Config{
 	public:
-		DDS_Config(int uio);
-		double GetActualFreq(uint32_t fword);
-		void getConfigData();
-		uint64_t getProfileCMD(bool cs);
-		void ResetDDS();					//Resets DDS Boards
-		void IOReset(); 					//Resets IO register
+		DDS_Config(int uio);							//constructor 
+		double GetActualFreq(uint32_t fword);			//convert frequenct tuning word to frequency
+		void getConfigData();							//sets CFR1, CFR2, CFR3
+		uint64_t getProfileCMD(bool cs);				//create the 64bit control word to send to DDS board
+		void ResetDDS();								//Resets DDS Boards
+		void IOReset(); 								//Resets IO register
 		void Write32(uint8_t address, uint32_t data);
 		void Write64(uint8_t address, uint64_t data);
 		void Read32(uint8_t data);

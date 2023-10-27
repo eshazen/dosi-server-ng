@@ -18,38 +18,24 @@ class ADC{
 		void StopCapture(); //Stop saving data to RAM
 		void StartProcessing(); //Starts processing data
 		void StopProcessing(); //Stops processing data
-		//Read Ram at an address
-		uint32_t getData(uint16_t RAMAddrA, uint16_t RAMAddrB);
-		//Read Ram at a range of addresses
-		void readRange(uint16_t startAddr, uint16_t stopAddr, uint32_t *data);
-		//Read Serial Register
-		uint8_t readRegister(uint8_t Address);
+		uint32_t getData(uint16_t RAMAddrA, uint16_t RAMAddrB);//Read Ram at an address   
+		void readRange(uint16_t startAddr, uint16_t stopAddr, uint32_t *data);//Read Ram at a range of addresses 
+		uint8_t readRegister(uint8_t Address);//Read Serial Register 
 		void writeRegister(uint8_t Address, uint8_t Data);
-		//Set the Test Patterns
-		void setTestPattern(uint8_t chA, uint8_t chB);
-		//Toggle standby status
-		void toggleStandby();
+		void setTestPattern(uint8_t chA, uint8_t chB);//Set the Test Patterns   
+		void toggleStandby();//Toggle standby status 
 		void standbyOn();
 		void standbyOff();
-		//Set internal gain
-		void setInternalGain(uint8_t iGainA, uint8_t iGainB);
-		//Set External Gain
-		void setExternalGain(uint8_t eGainA, uint8_t eGainB);
-		//Set Capture Length
-		void setCaptureLength(uint32_t inputLength);
-		//Set Filter Frequencies
-		void setFilterFrequencies();
-		//Read 1 Goertzel Result
-		void getGoertzelResult(uint8_t filtNum);
-		//Read all Goertzel Results
-		void getAllGoertzelResults();
-		//Checks if results are ready
-		bool resultsReady();
-		bool captureDone();
-		//read AXI register
-		uint32_t readAXIRegister(uint8_t reg);
-		//write AXI register
-		void writeAXIRegister(uint8_t reg,uint32_t data);
+		void setInternalGain(uint8_t iGainA, uint8_t iGainB); //Set internal gain   
+		void setExternalGain(uint8_t eGainA, uint8_t eGainB);  //Set External Gain    
+		void setCaptureLength(uint32_t inputLength);  //Set Capture Length  
+		void setFilterFrequencies(); //Set Filter Frequencies        
+		void getGoertzelResult(uint8_t filtNum); //Read 1 Goertzel Result 
+		void getAllGoertzelResults(); //Read all Goertzel Results 
+		bool resultsReady(); //Checks if results are ready  
+		bool captureDone(); 
+		uint32_t readAXIRegister(uint8_t reg); //read AXI register 
+		void writeAXIRegister(uint8_t reg,uint32_t data); //write AXI register     
 		bool gainSerialDone();
 
 		virtual ~ADC()

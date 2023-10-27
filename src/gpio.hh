@@ -16,7 +16,7 @@ class GPIO {
 		void writeGPIO(int, uint32_t); 	//write to GPIO register
 		uint32_t readGPIO(int);        	//read from GPIO register
 		
-		virtual ~GPIO();
+		virtual ~GPIO(); 				//destructor
 
 	private:
 		struct HW{

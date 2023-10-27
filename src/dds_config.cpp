@@ -58,7 +58,7 @@ void DDS::setChipSelect(bool cs) {
 	chipSelect = cs;
 }
 /*
- *PURPOSE: Returns Configuration register words to write to DDS chips prepare for a call to IOUpdate
+ *PURPOSE: sets Configuration register words to write to DDS chips prepare for a call to IOUpdate
  */
 void DDS::getConfigData() {
 	sysClk = (uint16_t)(refClkMultiplier * DDS_OSC);

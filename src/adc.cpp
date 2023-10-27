@@ -178,14 +178,10 @@ void ADC::setInternalGain(uint8_t igainA, uint8_t igainB){
 	}
 }
 
-/*void
- *ADC::setExternalGain(eGain)
- *
+/*
  *Inputs:
  *eGain   //6 bit PGA870 Gain control pins
- *
  *Purpose: Program the PGA870 Amplifier
- *
  */
 void ADC::setExternalGain(uint8_t eGainA, uint8_t eGainB) {
 	extGainA = eGainA & 0x3F;
