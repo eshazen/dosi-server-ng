@@ -27,19 +27,17 @@ ConfigCmd::~ConfigCmd() { };
 
 //
 // check if item matches against parsed command tokens in pv (count=n)
-// return:
-//   0 - no match
-//   1 - configuration edit
-//   2 - hardware action
-//   3 - "go"
+// return from enum ( CMD_ERROR, CMD_CONF, CMD_HW, CMD_GO)
 //
-int ConfigCmd::Match( const char **pv, int n) {
+int ConfigCmd::Match( const char **pv, int num_pv) {
+  if( num_pv < 1) return CMD_ERROR;
   if( match_string2 == NULL) {	// single match
     if( !strncasecmp( pv[0], match_string, min(strlen(pv[0]),strlen(match_string))))
       return type;
     else
       return CMD_ERROR;
   } else {
+    if( num_pv < 2) return CMD_ERROR;
     if( !strncasecmp( pv[0], match_string, min(strlen(pv[0]), strlen(match_string))) &&
 	!strncasecmp( pv[1], match_string2, min(strlen(pv[1]),strlen(match_string2))))
       return type;

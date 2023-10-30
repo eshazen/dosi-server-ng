@@ -44,9 +44,10 @@ enum process_mode_t {
 class DosiConfig {
 
 public:
-  DosiConfig();			  // constructor
-  ~DosiConfig();		  // destructor
-  void Print();
+  DosiConfig();		       // constructor
+  ~DosiConfig();	       // destructor
+  void Print();		       // print to std output
+  const char* checkErrors();   // NULL if OK, else ptr to error string
 
   // the server state, all invalid to begin
   uint32_t minFreq = -1;

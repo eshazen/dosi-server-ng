@@ -13,8 +13,11 @@
 //    c - pointer to DOSI configuration object
 //   hw - pointer to DOSI hardware control object
 //
+// if this is modified, you have to find where ConfigCmd::action() is called
+// and update the call (and any lambda expressions)
 #define ConfFunc_args (const char**pv,uint32_t *pi,DosiConfig *c,DOSI_HW *hw)
 
+// define a convenience typedef for use in function arguments
 typedef std::function<void ConfFunc_args> ConfFunc_t;
 
 // type of command
