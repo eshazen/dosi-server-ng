@@ -1,10 +1,12 @@
 ## Classes in new server
 
-| Class         | Description                 |
-|---------------|-----------------------------|
-| `TcpServer`   | TCP/IP server               |
-| `ParseString` | String parsing utilities    |
-| `DosiConfig`  | Manage server configuration |
+| Class           | Description                               |
+|-----------------|-------------------------------------------|
+| `TcpServer`     | TCP/IP server                             |
+| `ParseString`   | String parsing utilities                  |
+| `DosiConfig`    | Server configuration (replace old struct) |
+| `ConfigCmd`     | One configuration command                 |
+| `ConfigCmdList` | List of all configuration commands        |
 
 Thoughts on structure of new code.
 
@@ -22,10 +24,12 @@ methods (text and maybe HTML) to display the configuration.
 
 ### Command Parsing
 
-This is tricky, as the command structure is not very logical.
 There are 3 categories of commands:  those which modify the
 configuration, those which act immediately on the hardware, and the
 "GO" command to start a run.
+
+A list of all configuration commands is kept in `ConfigCmdList`.
+Commands are added with 
 
 A possible scheme:  provide a single method which parses the command,
 and selectively takes action on the 3 categories, based on pointers

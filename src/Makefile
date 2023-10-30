@@ -16,6 +16,9 @@ server: TcpServer.o server.o
 test_config.o: test_config.cpp ConfigParser.hh DosiConfig.hh
 ConfigParser.o: ConfigParser.cpp ConfigParser.hh
 DosiConfig.o: DosiConfig.cpp DosiConfig.hh
+ConfigCmd.o: ConfigCmd.cpp ConfigCmd.hh DosiConfig.hh
+ConfigCmdList.o: ConfigCmdList.cpp ConfigCmdList.hh ConfigCmd.hh DosiConfig.hh
+ParseString.o: ParseString.cpp ParseString.hh
 
-test_config: ConfigParser.o DosiConfig.o test_config.o
+test_config: ConfigCmd.o ConfigCmdList.o DosiConfig.o test_config.o ParseString.o
 	g++ -o $@ $^

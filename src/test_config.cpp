@@ -1,52 +1,105 @@
-#include <cstdint>
+//
+// Demo/test the command parser
+//
 
-#include "ConfigParser.hh"
+#include <cstdint>
+#include <cstring>
+#include <cstdio>
+
+#include "ConfigCmdList.hh"
 #include "DosiConfig.hh"
+#include "ParseString.hh"
+#include "DOSI_HW.hh"
+
+// define come convenience macros to build the command list
+// N.B. ConfFunc_args is defined in ConfigCmd.hh
+#define LAMBDA(cod) []ConfFunc_args cod    // create a lambda expression given a code block
+#define LIST_ADD1(t,s,cod)     list.AddItem( new ConfigCmd( t, s, LAMBDA(cod)))      // add 1-string command
+#define LIST_ADD2(t,s1,s2,cod) list.AddItem( new ConfigCmd( t, s1, s2, LAMBDA(cod))) // add 2-string command
 
 int main( int argc, char *argv[]) {
 
-  ConfigItemList list;
-  DosiConfig conf;
-  ConfigItem* it;
+  ConfigCmdList list;		// configuration command list
+  DosiConfig conf;		// DOSI server configuration
+  DOSI_HW HW;			// Hardware interface (dummy for now)
 
-  list.AddItem( new ConfigItem( "sn", Int1, &conf.minFreq, 1));
-  list.AddItem( new ConfigItem( "sx", Int1, &conf.maxFreq, 1));
-  list.AddItem( new ConfigItem( "ss", Int1, &conf.step, 1));
-  list.AddItem( new ConfigItem( "sf", Int1, &conf.numFreqs, 1));
+  char buff[80];		// raw command line for parsing
+  char *parv[10];		// parsed command as text tokens
+  uint32_t pari[10];		// parsed command integer tokens
 
-  list.AddItem( new ConfigItem( "sw", Int1, &conf.numSweeps, 1));
-  list.AddItem( new ConfigItem( "sa", Int1, &conf.samplesPerFreq, 1));
-  list.AddItem( new ConfigItem( "sp", Int1, &conf.SDsep, 1));
-  list.AddItem( new ConfigItem( "sy", Int1, &conf.sweepDelay, 1));
-  list.AddItem( new ConfigItem( "sv", Int1, &conf.ptsToAvg, 1));
-  list.AddItem( new ConfigItem( "st", Int1, &conf.saveTime, 1));
-  list.AddItem( new ConfigItem( "sc", Int1, &conf.calibrating, 1));
+  // construct the list of server commands.
+  // Use LIST_ADD1() for single-token commands, LIST_ADD2() for two-token commands
+  // Provide a code block, 
+  //   refer to pi[] (integer tokens), pv[] (string tokens), hw (hardware), c (configuration)
 
-  list.AddItem( new ConfigItem( "ms", Constant, &conf.mode, SINGLE_TONE ));
-  list.AddItem( new ConfigItem( "mt", Constant, &conf.mode, TIME));
-  list.AddItem( new ConfigItem( "mr", Constant, &conf.mode, REIM));
-  list.AddItem( new ConfigItem( "ma", Constant, &conf.mode, AMPPHASE));
-  list.AddItem( new ConfigItem( "mc", Constant, &conf.mode, CAL_REIM));
-  list.AddItem( new ConfigItem( "mp", Constant, &conf.mode, CAL_AMPPHASE));
-  list.AddItem( new ConfigItem( "mo", Constant, &conf.mode, OP));
-  list.AddItem( new ConfigItem( "mh", Constant, &conf.mode, CHROME));
-  list.AddItem( new ConfigItem( "mu", Constant, &conf.mode, DUAL_APD));
-  list.AddItem( new ConfigItem( "mv", Constant, &conf.mode, DUAL_APD_TRIGGER));
+  LIST_ADD1( CMD_CONF, "sn", {c->minFreq =  pi[1];});
+  LIST_ADD1( CMD_CONF, "sx", {c->maxFreq =  pi[1];});
+  LIST_ADD1( CMD_CONF, "ss", {c->step    =  pi[1];});
+  LIST_ADD1( CMD_CONF, "sf", {c->numFreqs = pi[1];});
 
-  list.AddItem( new ConfigItem( "t", Int1, &conf.triggerMode, 1));
+  LIST_ADD1( CMD_CONF, "sn", {c->minFreq = pi[1];});
+  LIST_ADD1( CMD_CONF, "sx", {c->maxFreq = pi[1];});
+  LIST_ADD1( CMD_CONF, "ss", {c->step = pi[1];});
+  LIST_ADD1( CMD_CONF, "sf", {c->numFreqs = pi[1];});
+  LIST_ADD1( CMD_CONF, "sw", {c->numSweeps = pi[1];});
+  LIST_ADD1( CMD_CONF, "sa", {c->samplesPerFreq = pi[1];});
+  LIST_ADD1( CMD_CONF, "sp", {c->SDsep = pi[1];});
+  LIST_ADD1( CMD_CONF, "sy", {c->sweepDelay = pi[1];});
+  LIST_ADD1( CMD_CONF, "sv", {c->ptsToAvg = pi[1];});
+  LIST_ADD1( CMD_CONF, "st", {c->saveTime = pi[1];});
+  LIST_ADD1( CMD_CONF, "sc", {c->calibrating = pi[1];});
 
-  list.AddItem( new ConfigItem( "sd", Laser, &conf.whichDiodes, 1));  
-  
-  list.AddItem( new ConfigItem( "pam", "c", PGAMode, &conf.pgaModeA, CONST));
-  list.AddItem( new ConfigItem( "pam", "l", PGAMode, &conf.pgaModeA, LINEAR));
-  list.AddItem( new ConfigItem( "pam", "g", PGAMode, &conf.pgaModeA, LOG));
-  list.AddItem( new ConfigItem( "pam", "p", PGAMode, &conf.pgaModeA, PTBYPT));
+  LIST_ADD1( CMD_CONF, "ms", {c->mode = SINGLE_TONE ;});
+  LIST_ADD1( CMD_CONF, "mt", {c->mode = TIME;});
+  LIST_ADD1( CMD_CONF, "mr", {c->mode = REIM;});
+  LIST_ADD1( CMD_CONF, "ma", {c->mode = AMPPHASE;});
+  LIST_ADD1( CMD_CONF, "mc", {c->mode = CAL_REIM;});
+  LIST_ADD1( CMD_CONF, "mp", {c->mode = CAL_AMPPHASE;});
+  LIST_ADD1( CMD_CONF, "mo", {c->mode = OP;});
+  LIST_ADD1( CMD_CONF, "mh", {c->mode = CHROME;});
+  LIST_ADD1( CMD_CONF, "mu", {c->mode = DUAL_APD;});
+  LIST_ADD1( CMD_CONF, "mv", {c->mode = DUAL_APD_TRIGGER;});
 
-  list.AddItem( new ConfigItem( "pbm", "c", PGAMode, &conf.pgaModeB, CONST));
-  list.AddItem( new ConfigItem( "pbm", "l", PGAMode, &conf.pgaModeB, LINEAR));
-  list.AddItem( new ConfigItem( "pbm", "g", PGAMode, &conf.pgaModeB, LOG));
-  list.AddItem( new ConfigItem( "pbm", "p", PGAMode, &conf.pgaModeB, PTBYPT));
+ LIST_ADD1( CMD_CONF, "t", {c->triggerMode = pi[1];});
 
-  list.Print();
+ LIST_ADD1( CMD_CONF, "sd", {
+     if( parse_laser_string( pv[1], c->whichDiodes))
+       { fprintf(stderr,"Bad laser config string: %s\n", pv[1]);   exit(1); }  });
+  LIST_ADD2( CMD_CONF, "pam", "c", {c->pgaModeA = CONST;});
+  LIST_ADD2( CMD_CONF, "pam", "l", {c->pgaModeA = LINEAR;});
+  LIST_ADD2( CMD_CONF, "pam", "g", {c->pgaModeA = LOG;});
+  LIST_ADD2( CMD_CONF, "pam", "p", {c->pgaModeA = PTBYPT;});
+  LIST_ADD2( CMD_CONF, "pbm", "c", {c->pgaModeB = CONST;});
+  LIST_ADD2( CMD_CONF, "pbm", "l", {c->pgaModeB = LINEAR;});
+  LIST_ADD2( CMD_CONF, "pbm", "g", {c->pgaModeB = LOG;});
+  LIST_ADD2( CMD_CONF, "pbm", "p", {c->pgaModeB = PTBYPT;});
 
+  LIST_ADD1( CMD_GO, "g", {printf("START A RUN!\n");});
+
+ //---- main loop to let user type commands ----
+
+  while( 1) {
+    fgets( buff, sizeof(buff), stdin);
+    // parse string into text and integer tokens
+    int nt = parse_string( buff, parv, pari, sizeof(pari)/sizeof(pari[0]));
+    if( nt) {
+      // look up the command
+      ConfigCmd* it = list.Search( (const char**)parv, nt);
+      if( it) {
+	printf("Found.  Type=%d\n", it->Type());
+	// run the lambda function bound to the item
+	it->action( (const char**)parv, pari, &conf, &HW);
+	// if it changed the configuration, print
+	if( it->Type() == CMD_CONF)
+	  conf.Print();
+      } else {
+	printf("Not found\n");
+      }
+    } else {
+      // nothing typed, just dump the command list
+      printf("----\n");
+      list.Print();
+      printf("----\n");
+    }
+  }
 }

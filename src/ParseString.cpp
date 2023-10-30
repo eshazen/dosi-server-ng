@@ -1,3 +1,9 @@
+#include <cstdio>
+#include <cstdint>
+#include <cctype>
+#include <cstring>
+#include <cstdlib>
+
 //
 // parse a string s into up to maxtok tokens (as argc, argv)
 // store pointers in parv
@@ -24,4 +30,23 @@ int parse_string( char *s, char *parv[], uint32_t *pari, int maxtok) {
       break;
   }
   return i;
+}
+
+
+
+//
+// parse_laser_string() - parse a 6-character binary laser enable string
+// set boolean array ena to reflect values (if NULL, ignore)
+// return 0 on success, 1 on error
+//
+int parse_laser_string( const char *s, bool ena[6]) {
+  if( strlen(s) != 6) return 1;
+  for( int i=0; i<6; i++) {
+    if( s[i] == '0' || s[i] == '1')
+      if( ena != NULL)
+	ena[i] = (s[i] == '1');
+    else
+      return 1;
+  }
+  return 0;
 }
