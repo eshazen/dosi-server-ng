@@ -1,5 +1,13 @@
 #ifndef CONFIG_CMD_HH
 #define CONFIG_CMD_HH
+// ConfigCmd.hh - one DOSI configuration command
+//
+// Each command is defined by:
+//   1 or 2 string tokens
+//   a type from the enum
+//   'action' function object which is executed when the command is received
+//     (these are initialized using lambda expressions in ConfigCmdList::InitializeList())
+//
 
 #include "DOSI_HW.hh"
 #include "DosiConfig.hh"

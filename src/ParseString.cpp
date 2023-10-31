@@ -1,3 +1,9 @@
+// ParseString.cpp - helper functions for string parsing
+//
+//  parse_string(...)    - parse a string s into up to maxtok tokens (as argc, argv)
+//  parse_laser_string() - parse a 6-character binary laser enable string
+//
+
 #include <cstdio>
 #include <cstdint>
 #include <cctype>

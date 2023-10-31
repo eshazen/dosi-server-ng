@@ -72,6 +72,8 @@ public:
   uint32_t *pgaInA = NULL;
   uint32_t *pgaInB = NULL;
 
+  char* raw_laser_config;
+
   bool debug = false;
 };
 

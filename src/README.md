@@ -8,6 +8,22 @@ This will be a long list, no doubt!
 error messages.  Print errors to `stdout` and also (eventually) return
 to the client.
 
+## Files
+
+    ConfigCmd.cpp            class: one configuration command
+    ConfigCmdList.cpp        class: list of configuration commands
+    DebugLog.cpp             class: simple debug message logger
+    DosiConfig.cpp           class: DOSI configuration 
+    DOSI_HW.cpp              class: manage DOSI hardware I/F
+    interactive_test.cpp     app: interactive TCP server for debug
+    ParseString.cpp          class: string parsing utilities
+    server.cpp               app: simple stand-alone TCP server
+    sim_dosi.c               app: standalone test server
+    TcpServer.cpp            class: TCP server
+    test_config.cpp          app: test ConfigCmdList class
+    test_DebugLog.cpp        app: test DebugLog class
+
+
 ## Classes in new server
 
 | Class           | Description                               |

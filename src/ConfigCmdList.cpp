@@ -1,11 +1,31 @@
+// ConfigCmdList.cpp - manage a list of configuration commands
+//
+// this is basically just a vector<ConfigCmd *> with some convenience functions
+//
+// The default constructor calls InitializeList() which fills in the DOSI commands.
+// If you want an empty list for some reason call Clear()
+//
+// Print()          - calls Print() on each item to render a badly-formatted list
+// Clear()          - empty the list of items
+// AddItem( *it)    - add a ConfigCmd item (by pointer)
+// Size()           - returns the list size
+// Get( int i)      - retrieve a pointer to item i
+// Search( pv, np)  - search for an item.
+//                      pv is an array of pointers to command tokens
+//                      np is the number of tokens.
+//                      returns pointer to the item or NULL if not found
+// InitializeList() - fill in DOSI commands
+//
+
 #include <cstdio>
+#include <cstring>
+
 #include "ConfigCmdList.hh"
 #include "ParseString.hh"
 #include "DOSI_HW.hh"
 
 ConfigCmdList::ConfigCmdList() { InitializeList(); };
 ConfigCmdList::~ConfigCmdList() { };
-
 
 void ConfigCmdList::Print() {
   if( items.size()) {
@@ -14,6 +34,10 @@ void ConfigCmdList::Print() {
   } else {
     printf("Empty list\n");
   }
+}
+
+void ConfigCmdList::Clear() {
+  items.clear();
 }
 
 void ConfigCmdList::AddItem( ConfigCmd *it) {
@@ -47,6 +71,8 @@ ConfigCmd* ConfigCmdList::Search( const char *pv[], int np) {
 #define LIST_ADD2(t,s1,s2,cod) AddItem( new ConfigCmd( t, s1, s2, LAMBDA(cod))) // add 2-string command
 
 void ConfigCmdList::InitializeList() {
+
+  items.clear();
 
   // construct the list of server commands.
   // Use LIST_ADD1() for single-token commands, LIST_ADD2() for two-token commands
@@ -83,9 +109,8 @@ void ConfigCmdList::InitializeList() {
 
   LIST_ADD1( CMD_CONF, "t", {c->triggerMode = pi[1];});
 
-  LIST_ADD1( CMD_CONF, "sd", {
-      if( parse_laser_string( pv[1], c->whichDiodes))
-	{ fprintf(stderr,"Bad laser config string: %s\n", pv[1]);   exit(1); }  });
+  LIST_ADD1( CMD_CONF, "sd", {c->raw_laser_config = strdup(pv[1]);});
+
   LIST_ADD2( CMD_CONF, "pam", "c", {c->pgaModeA = CONST;});
   LIST_ADD2( CMD_CONF, "pam", "l", {c->pgaModeA = LINEAR;});
   LIST_ADD2( CMD_CONF, "pam", "g", {c->pgaModeA = LOG;});

@@ -1,10 +1,18 @@
 #ifndef DEBUG_LOG_HH
 #define DEBUG_LOG_HH
-
 //
 // DebugLog.hh - very simple debug message handler
 // slightly patterned after syslog
 //
+// Log message levels below, lower value is higher priority
+// to log a message, e.g:
+//   DebugLog::log( LOG_NOTICE, "something might be wrong");
+//
+// Set the level to WARNING and more serious:
+//   DebugLog::setlogmask( LOG_UPTO( LOG_WARNING));
+// (the default is to log everything)
+//
+
 #define  LOG_EMERG    0 //  system is unusable
 #define  LOG_ALERT    1 //  action must be taken immediately
 #define  LOG_CRIT     2 //  critical conditions

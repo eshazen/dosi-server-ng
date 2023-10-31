@@ -1,16 +1,17 @@
 
-all: server test_config test_DebugLog
+all: server test_config test_DebugLog interactive_test dosi_server
 
 clean:
 	rm -f *.o
 	rm -f server
 
-main.o: main.cpp TcpServer.hh
+dosi_server.o: dosi_server.cpp DebugLog.hh TcpServer.hh
+interactive_test.o: interactive_test.cpp TcpServer.hh
 TcpServer.o: TcpServer.cpp TcpServer.hh
 server.o: server.cpp
-interactive_test: TcpServer.o main.o
+interactive_test: TcpServer.o interactive_test.o DebugLog.o
 	g++ -o $@ $^
-server: TcpServer.o server.o
+server: TcpServer.o server.o DebugLog.o
 	g++ -o $@ $^
 
 test_DebugLog.o: test_DebugLog.cpp DebugLog.hh
@@ -25,4 +26,8 @@ test_config: ConfigCmd.o ConfigCmdList.o DosiConfig.o test_config.o ParseString.
 	g++ -o $@ $^
 
 test_DebugLog: test_DebugLog.o DebugLog.o
+	g++ -o $@ $^
+
+dosi_server: dosi_server.o TcpServer.o DebugLog.o ConfigCmd.o ConfigCmdList.o DosiConfig.o \
+             ParseString.o DOSI_HW.o
 	g++ -o $@ $^

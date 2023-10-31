@@ -1,3 +1,7 @@
+// DOSI_HW.cpp - hardware interface
+//
+// these are placeholders
+
 #include "DOSI_HW.hh"
 #include "DebugLog.hh"
 

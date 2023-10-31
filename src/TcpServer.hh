@@ -1,11 +1,9 @@
+#ifndef TCP_SERVER_HH
+#define TCP_SERVER_HH
 // TcpServer.hh
 //
 // Header file for simple TCP server class
 //
-
-
-#ifndef TCP_SERVER_HH
-#define TCP_SERVER_HH
 
 #include <stdint.h>
 #include <stdbool.h>
