@@ -17,6 +17,8 @@ to the client.
 | `DosiConfig`    | Server configuration (replace old struct) |
 | `ConfigCmd`     | One configuration command                 |
 | `ConfigCmdList` | List of all configuration commands        |
+| `DOSI_HW`       | Control hardware                          |
+|                 |                                           |
 
 Thoughts on structure of new code.
 
@@ -25,6 +27,15 @@ classes `DDSH_hl`, `ADC` and `GPIO`.  The constructor can take care of
 all the initialization of the hardware (also providing a method like
 `hardwareInit()` to force re-initialization).  It should also have
 generic methods like `selectAPD()` and `enableLasers()`.
+
+### DOSI_HW methods
+
+* selectAPD()
+* enableActiveLasers()
+* disableAllLasers()
+* setSpectrometer()
+* runDOSI() ? or in another class?
+* writeGPIO() ?
 
 `DosiConfig` class takes the place of the old struct.  For now, all
 public members.  Constructor sets all values to invalid settings so
