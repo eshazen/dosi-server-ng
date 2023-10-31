@@ -12,13 +12,13 @@ to the client.
 
 | Class           | Description                               |
 |-----------------|-------------------------------------------|
+| `DebugLog`      | Generic debug log facility like syslog    |
 | `TcpServer`     | TCP/IP server                             |
 | `ParseString`   | String parsing utilities                  |
 | `DosiConfig`    | Server configuration (replace old struct) |
 | `ConfigCmd`     | One configuration command                 |
 | `ConfigCmdList` | List of all configuration commands        |
-| `DOSI_HW`       | Control hardware                          |
-|                 |                                           |
+| `DOSI_HW`       | Control hardware (dummy for now)          |
 
 Thoughts on structure of new code.
 

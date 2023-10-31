@@ -1,6 +1,7 @@
 #include <cstdio>
 #include "ConfigCmdList.hh"
 #include "ParseString.hh"
+#include "DOSI_HW.hh"
 
 ConfigCmdList::ConfigCmdList() { InitializeList(); };
 ConfigCmdList::~ConfigCmdList() { };
@@ -94,5 +95,5 @@ void ConfigCmdList::InitializeList() {
   LIST_ADD2( CMD_CONF, "pbm", "g", {c->pgaModeB = LOG;});
   LIST_ADD2( CMD_CONF, "pbm", "p", {c->pgaModeB = PTBYPT;});
 
-  LIST_ADD1( CMD_GO, "g", {printf("START A RUN!\n");});
+  LIST_ADD1( CMD_GO, "g", {hw->runDOSI( NULL);});
 }
