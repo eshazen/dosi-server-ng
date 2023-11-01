@@ -2,11 +2,18 @@
 //
 // manage server configuration
 //
+// Initialized values of all member variables should be invalid
+//
+// DefaultValues() sets to current server defaults for debugging
+// checkErrors() checks for errors and returns a message string or NULL if OK
+//
 
 #ifndef DOSI_CONFIG_HH
 #define DOSI_CONFIG_HH
 
 #include <cstdint>
+
+#define NUM_LASERS 6
 
 // code types of configuration commands
 enum cmd_type_t {
@@ -48,6 +55,7 @@ public:
   ~DosiConfig();	       // destructor
   void Print();		       // print to std output
   const char* checkErrors();   // NULL if OK, else ptr to error string
+  void DefaultValues();	       // set values to some defaults for debug
 
   // the server state, all invalid to begin
   uint32_t minFreq = -1;
@@ -76,6 +84,5 @@ public:
 
   bool debug = false;
 };
-
 
 #endif  

@@ -65,3 +65,41 @@ void DosiConfig::Print() {
   PRIT(pgaModeA);
   PRIT(pgaModeB);
 }
+
+
+
+//
+// set reasonable defaults for debug
+//
+void DosiConfig::DefaultValues() {
+  
+  //DEFAULT CONFIGURATION. YOU CAN CHANGE IT IF YOU WANT
+  //All the run scripts will parse this configuration to set parameters
+  minFreq = 50;
+  maxFreq = 450;
+  step = 5;
+  numFreqs = 10;
+  numSweeps = 1;
+  for(uint16_t iter = 0; iter < 6; iter++){
+    DDSamp[iter] = 0x3FFF;
+  }  
+  saveTime = false;
+  samplesPerFreq = 8192;
+  calibrating = false;
+  SDsep = 10;
+  sweepDelay = 0;
+  ptsToAvg = 1; //1 means take 1 measurement, 0 would be no measurements
+  //Set all diodes to true
+  for (uint32_t j = 0; j<NUM_LASERS; j++) {
+    whichDiodes[j] = true;
+  }
+  numDiodes = NUM_LASERS;
+  mode = REIM;
+  debug = false;
+  pgaModeA = CONST;
+  pgaModeB = CONST;
+  //Set PGA to 20 for both channels
+  //  pgaInA = pgaAtop;
+  //  pgaInB = pgaBtop;
+  triggerMode = 0;
+}

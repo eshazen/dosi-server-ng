@@ -2,8 +2,6 @@
 
 This will be a long list, no doubt!
 
-* Combine `server.cpp` and `test_config.cpp` to make a demo server
-  which can parse commands and return errors as appropriate.
 * Check all `DosiConfig` members for correct range with reasonable
 error messages.  Print errors to `stdout` and also (eventually) return
 to the client.

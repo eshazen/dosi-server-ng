@@ -37,15 +37,15 @@ ConfigCmd::~ConfigCmd() { };
 int ConfigCmd::Match( const char **pv, int num_pv) {
   if( num_pv < 1) return CMD_ERROR;
   if( match_string2 == NULL) {	// single string to match
-    if( !strncasecmp( pv[0], match_string, min(strlen(pv[0]),strlen(match_string))))
+    if( !strcasecmp( pv[0], match_string))
       return type;
     else
       return CMD_ERROR;
   } else {
     if( num_pv < 2) return CMD_ERROR;
     // check against two strings
-    if( !strncasecmp( pv[0], match_string, min(strlen(pv[0]), strlen(match_string))) &&
-	!strncasecmp( pv[1], match_string2, min(strlen(pv[1]),strlen(match_string2))))
+    if( !strcasecmp( pv[0], match_string) &&
+	!strcasecmp( pv[1], match_string2))
       return type;
     else
       return CMD_ERROR;
