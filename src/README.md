@@ -1,12 +1,9 @@
 ## ToDo
 
-This will be a long list, no doubt!
-
-* Combine `server.cpp` and `test_config.cpp` to make a demo server
-  which can parse commands and return errors as appropriate.
 * Check all `DosiConfig` members for correct range with reasonable
 error messages.  Print errors to `stdout` and also (eventually) return
 to the client.
+* Integrate with the hardware control code
 
 ## Files
 
@@ -15,14 +12,13 @@ to the client.
     DebugLog.cpp             class: simple debug message logger
     DosiConfig.cpp           class: DOSI configuration 
     DOSI_HW.cpp              class: manage DOSI hardware I/F
-    interactive_test.cpp     app: interactive TCP server for debug
     ParseString.cpp          class: string parsing utilities
-    server.cpp               app: simple stand-alone TCP server
-    sim_dosi.c               app: standalone test server
     TcpServer.cpp            class: TCP server
+	test_TcpServer.cpp       app: test TcpServer
     test_config.cpp          app: test ConfigCmdList class
     test_DebugLog.cpp        app: test DebugLog class
-
+    server.cpp               app: simple stand-alone TCP server
+    sim_dosi.c               app: standalone test server
 
 ## Classes in new server
 
