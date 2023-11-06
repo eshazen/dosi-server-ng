@@ -2,11 +2,18 @@
 //
 // manage server configuration
 //
+// Initialized values of all member variables should be invalid
+//
+// DefaultValues() sets to current server defaults for debugging
+// checkErrors() checks for errors and returns a message string or NULL if OK
+//
 
 #ifndef DOSI_CONFIG_HH
 #define DOSI_CONFIG_HH
 
 #include <cstdint>
+
+#define NUM_LASERS 6
 
 // code types of configuration commands
 enum cmd_type_t {
@@ -18,6 +25,7 @@ enum cmd_type_t {
 };
 
 enum pgaMode_t {
+  PG_UNDEF = -1,
   CONST = 30,
   LINEAR = 31,
   LOG = 32,
@@ -25,6 +33,7 @@ enum pgaMode_t {
 };
 
 enum process_mode_t {
+  PM_UNDEF=-1,
   SINGLE_TONE=10,
   TIME=11, 
   REIM=12, 
@@ -42,34 +51,38 @@ enum process_mode_t {
 class DosiConfig {
 
 public:
-  DosiConfig();			  // constructor
-  ~DosiConfig();		  // destructor
+  DosiConfig();		       // constructor
+  ~DosiConfig();	       // destructor
+  void Print();		       // print to std output
+  const char* checkErrors();   // NULL if OK, else ptr to error string
+  void DefaultValues();	       // set values to some defaults for debug
 
-  // the server state
-  uint32_t minFreq;
-  uint32_t maxFreq;
-  uint32_t step;
-  uint32_t numFreqs;
-  uint32_t numDiodes;
-  uint32_t numSweeps;
-  uint32_t samplesPerFreq;
-  uint32_t SDsep;
-  uint32_t sweepDelay;
-  uint32_t ptsToAvg;
-  uint32_t triggerMode;
+  // the server state, all invalid to begin
+  uint32_t minFreq = -1;
+  uint32_t maxFreq = -1;
+  uint32_t step = -1;
+  uint32_t numFreqs = -1;
+  uint32_t numDiodes = -1;
+  uint32_t numSweeps = -1;
+  uint32_t samplesPerFreq = -1;
+  uint32_t SDsep = -1;
+  uint32_t sweepDelay = -1;
+  uint32_t ptsToAvg = -1;
+  uint32_t triggerMode = -1;
   uint16_t DDSamp[6];
-  bool saveTime;
+  bool saveTime = -1;
   bool whichDiodes[6];
-  bool calibrating;
+  bool calibrating = -1;
 
-  process_mode_t mode;
-  pgaMode_t pgaModeA;
-  pgaMode_t pgaModeB;
-  uint32_t *pgaInA;
-  uint32_t *pgaInB;
+  process_mode_t mode = PM_UNDEF;
+  pgaMode_t pgaModeA = PG_UNDEF;
+  pgaMode_t pgaModeB = PG_UNDEF;
+  uint32_t *pgaInA = NULL;
+  uint32_t *pgaInB = NULL;
+
+  char* raw_laser_config;
 
   bool debug = false;
 };
-
 
 #endif  

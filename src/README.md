@@ -1,44 +1,71 @@
+## ToDo
+
+* Check all `DosiConfig` members for correct range with reasonable
+error messages.  Print errors to `stdout` and also (eventually) return
+to the client.
+* Integrate with the hardware control code
+
+## Files
+
+    ConfigCmd.cpp            class: one configuration command
+    ConfigCmdList.cpp        class: list of configuration commands
+    DebugLog.cpp             class: simple debug message logger
+    DosiConfig.cpp           class: DOSI configuration 
+    DOSI_HW.cpp              class: manage DOSI hardware I/F
+    ParseString.cpp          class: string parsing utilities
+    TcpServer.cpp            class: TCP server
+	test_TcpServer.cpp       app: test TcpServer
+    test_config.cpp          app: test ConfigCmdList class
+    test_DebugLog.cpp        app: test DebugLog class
+    server.cpp               app: simple stand-alone TCP server
+    sim_dosi.c               app: standalone test server
+
 ## Classes in new server
 
-| Class         | Description                 |
-|---------------|-----------------------------|
-| `TcpServer`   | TCP/IP server               |
-| `ParseString` | String parsing utilities    |
-| `DosiConfig`  | Manage server configuration |
+| Class           | Description                               |
+|-----------------|-------------------------------------------|
+| `DebugLog`      | Generic debug log facility like syslog    |
+| `TcpServer`     | TCP/IP server                             |
+| `ParseString`   | String parsing utilities                  |
+| `DosiConfig`    | Server configuration (replace old struct) |
+| `ConfigCmd`     | One configuration command                 |
+| `ConfigCmdList` | List of all configuration commands        |
+| `DOSI_HW`       | Control hardware (dummy for now)          |
 
 Thoughts on structure of new code.
 
-Create a new class `DOSI` which acts as a container for all the HW
+Create a new class `DOSI_HW` which acts as a container for all the HW
 classes `DDSH_hl`, `ADC` and `GPIO`.  The constructor can take care of
 all the initialization of the hardware (also providing a method like
 `hardwareInit()` to force re-initialization).  It should also have
 generic methods like `selectAPD()` and `enableLasers()`.
 
-`DosiConfig` class takes the place of the old struct.  No public
-members.  Constructor sets all values to invalid settings so
+### DOSI_HW methods
+
+* selectAPD()
+* enableActiveLasers()
+* disableAllLasers()
+* setSpectrometer()
+* runDOSI() ? or in another class?
+* writeGPIO() ?
+
+`DosiConfig` class takes the place of the old struct.  For now, all
+public members.  Constructor sets all values to invalid settings so
 everything must be set from a configuration file.  Provide a
 `checkValid()` method to ensure this is so.  Also provide print
 methods (text and maybe HTML) to display the configuration.
 
 ### Command Parsing
 
-This is tricky, as the command structure is not very logical.
 There are 3 categories of commands:  those which modify the
 configuration, those which act immediately on the hardware, and the
 "GO" command to start a run.
 
-A possible scheme:  provide a single method which parses the command,
-and selectively takes action on the 3 categories, based on pointers
-passed:
-
-1.  Configuration modified if a `DosiConfig` is passed
-2.  Hardware updated if `DOSI` is passed
-3.  Go triggered if `EnableGo` boolean is true
-
-This allows for testing with no action taken or in simulation.
-
-Finally, each command should return an acknowledgement with at minimum
-'OK' and 'Error' options.
+A list of all configuration commands is kept in `ConfigCmdList`.
+The constructor calls `Initialize()` which builds the list for DOSI.
+Commands are added with `AddItem()`.  Search for a command using
+`Search()`.  See `test_config.cpp` for a complete example of how to
+use this.
 
 ## Code / Class structure in old server
 

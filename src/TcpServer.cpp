@@ -22,6 +22,7 @@
 // ------------------------------------------------------------------------
 
 #include "TcpServer.hh"
+#include "DebugLog.hh"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -45,7 +46,7 @@ void TcpServer::InitializeListen( int port) {
 
   int c_one = 1;		// constant one
 
-  if( debug) printf("TcpServer::InitializeListen() sock_in = 0x%lx\n", (unsigned long)&sock_in);
+  DebugLog::log( LOG_DEBUG, "TcpServer::InitializeListen() sock_in = 0x%lx\n", (unsigned long)&sock_in);
 
   /*
    * Initialize the address data structure
@@ -60,7 +61,7 @@ void TcpServer::InitializeListen( int port) {
    * set SOCK_NONBLOCK so we can poll for connections
    */
   if ((listen_s = socket(PF_INET, SOCK_STREAM | SOCK_NONBLOCK, IPPROTO_TCP)) < 0) {
-    fprintf(stderr, "TcpServer::InitializeListen() - Failed to create socket - %s\n", strerror(errno));
+    DebugLog::log( LOG_ERR, "TcpServer::InitializeListen() - Failed to create socket - %s\n", strerror(errno));
     exit(1);
   }
 
@@ -71,7 +72,7 @@ void TcpServer::InitializeListen( int port) {
    * Bind an address to the socket
    */
   if (bind(listen_s, (struct sockaddr *)&sock_in, sizeof(sock_in)) < 0) {
-    fprintf(stderr, "TcpServer::InitializeListen() - Failed to bind - %s\n", strerror(errno));
+    DebugLog::log( LOG_ERR,  "TcpServer::InitializeListen() - Failed to bind - %s\n", strerror(errno));
     exit(1);
   }
 
@@ -79,7 +80,7 @@ void TcpServer::InitializeListen( int port) {
    * Set the length of the listen queue
    */
   if (listen(listen_s, MAX_PENDING) < 0) {
-    fprintf(stderr, "TcpServer::InitializeListen() - Failed to set listen queue - %s\n", strerror(errno));
+    DebugLog::log( LOG_ERR,  "TcpServer::InitializeListen() - Failed to set listen queue - %s\n", strerror(errno));
     exit(1);
   }
 
@@ -122,7 +123,7 @@ int TcpServer::CheckConnect() {
       return 0;
     } else {
       // some other error - die
-      fprintf(stderr, "TcpServer::CheckConnect accept - %s\n",
+      DebugLog::log( LOG_ERR,  "TcpServer::CheckConnect accept - %s\n",
 	      strerror(errno));
       exit(1);
     }
@@ -173,7 +174,7 @@ int TcpServer::CheckData() {
       buf_count = 0;
     } else {
       // anything else is fatal
-      fprintf(stderr, "TcpServer::CheckData recv - %s\n",
+      DebugLog::log( LOG_ERR,  "TcpServer::CheckData recv - %s\n",
 	      strerror(errno));
       exit( 1);
     }
@@ -254,7 +255,7 @@ int TcpServer::SendData( void *data, int count, int binary) {
       if( errno == EAGAIN || errno == EWOULDBLOCK) {
 	return 0;
       } else {
-	fprintf(stderr, "TcpServer::SendData() header - %s\n", strerror(errno));
+	DebugLog::log( LOG_ERR,  "TcpServer::SendData() header - %s\n", strerror(errno));
 	return -1;
       }
     }
@@ -269,7 +270,7 @@ int TcpServer::SendData( void *data, int count, int binary) {
     if( errno == EAGAIN || errno == EWOULDBLOCK) {
       return 0;
     } else {
-      fprintf(stderr, "TcpServer::SendData() data - %s\n", strerror(errno));
+      DebugLog::log( LOG_ERR,  "TcpServer::SendData() data - %s\n", strerror(errno));
       return -1;
     }
   }
