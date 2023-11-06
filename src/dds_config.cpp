@@ -7,7 +7,7 @@ DDS_Config::DDS_Config(int uio){
 	}
 	char UIDev[15];
 	sprintf(UIDev, "/dev/uio%d",UIO);
-	fprintf(stderr,"%s\n", UIDev);
+	DebugLog::log( LOG_DEBUG, "%s\n", UIDev);
 	int fdUIO = open(UIDev, O_RDWR|O_SYNC);
 	//setup memory mappings
 	AXI = (DDS::HW*) mmap(NULL,
@@ -186,5 +186,5 @@ uint16_t DDS::phase2pow(float p){
 }
 
 DDS_Config::~DDS_Config(){
-	fprintf(stderr, "destructing DDS_config class");
+	DebugLog::log( LOG_DEBUG, "destructing, DDS_Config class");
 }

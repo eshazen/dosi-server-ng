@@ -308,5 +308,5 @@ void DDS_hl::setChipSelect(bool cs) {
 }
 
 DDS_hl::~DDS_hl(){
-	fprintf(stderr, "destructing DDS_hl class");
+	DubugLog::log( LOG_DEBUG, "destructing DDS_hl class");
 }

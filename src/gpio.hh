@@ -7,6 +7,7 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "Debuglog.hh"
 
 #define GPIO_PORT 4
 

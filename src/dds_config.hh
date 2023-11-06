@@ -8,6 +8,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <DebugLog.hh>
 
 #define DDS_P0RT0 0
 #define DDS_P0RT1 1	

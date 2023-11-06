@@ -3,9 +3,10 @@
 
 #include <sys/mman.h>
 #include <sys/stat.h>
-#include<fcntl.h>
-#include<stdlib.h>
-#include<stdio.h>
+#include <fcntl.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include "DebugLog.hh"
 
 #define ADC_PORT 2
 

@@ -3,7 +3,7 @@
 GPIO::GPIO(){
 	char UIDev[15];
 	sprint(UIDev, "/dev/uto%d", GPIO_PORT);
-	fprint(stderr, "%s\n", UIDev);
+	DebugLog::log( LOG_DEBUG, "%s\n", UIDev);
 	int fdUIO = open(UIDev, O_RDWR|O_SYNC);
 
 	//setup memory mapping
@@ -25,5 +25,5 @@ uint32_t GPIO::readGPIO(int address) {
 }
 
 GPIO::~GPIO(){
-	fprintf(stderr, "destructing GPIO class");
+	DebugLog::log( LOG_DEBUG, "destructing GPIO class");
 }

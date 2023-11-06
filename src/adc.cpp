@@ -2,7 +2,7 @@
 
 ADC::ADC(){
 	char UIDev[15];
-	sprintf(UIDev, "/dev/uio%d",ADC_PORT);
+	Debug::log( LOG_DEBUG, "%s\n", UIDev);
 	fprintf(stderr,"%s\n", UIDev);
 	int fdUIO = open(UIDev, O_RDWR|O_SYNC);
 
@@ -367,5 +367,5 @@ void ADC::writeRegister(uint8_t Address, uint8_t Data) {
 }
 
 ADC::~ADC(){
-	fprintf(stderr, "destructing ADC class");
+	DebugLog::log( LOG_DEBUG, "destructing, ADC class");
 }
