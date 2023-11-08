@@ -1,16 +1,17 @@
 #include "dds_config.hh"
 
 DDS_Config::DDS_Config(int uio){
-	Board = UIO;
-	if (UIO > 4 || UIO < 0) {
+	Board = uio;
+	if (uio > 4 || uio < 0) {
 		DebugLog::log( LOG_ERR, "UIO must be between 0 and 4");
 	}
 	char UIDev[15];
+	sprintf(UIDev, "dev/uto%d", uio);
 	DebugLog::log( LOG_DEBUG, "%s\n", UIDev);
 	int fdUIO = open(UIDev, O_RDWR|O_SYNC);
 	//setup memory mappings
-	AXI = (DDS::HW*) mmap(NULL,
-			sizeof(DDS::HW),
+	AXI = (DDS_Config::HW*) mmap(NULL,
+			sizeof(DDS_Config::HW),
 			PROT_READ|PROT_WRITE,
 			MAP_SHARED,
 			fdUIO,
@@ -42,16 +43,16 @@ DDS_Config::DDS_Config(int uio){
 	profileCMD = getProfileCMD(false);	
 }
 
-bool DDS::serialDone() {
+bool DDS_Config::serialDone() {
 	return ((AXI->reg[0] >> 12) & 0x01);
 }
 
-bool DDS::getChipSelect() {
+bool DDS_Config::getChipSelect() {
 	chipSelect = (AXI->reg[0] >> 24) & 0x01;
 	return chipSelect;
 }
 
-void DDS::setChipSelect(bool cs) {
+void DDS_Config::setChipSelect(bool cs) {
 	uint32_t axiCopy = AXI->reg[0] & 0xFEFFFFFF; //Clear the chip select bit
 	AXI->reg[0] = axiCopy | (cs << 24);
 	chipSelect = cs;
@@ -59,7 +60,7 @@ void DDS::setChipSelect(bool cs) {
 /*
  *PURPOSE: sets Configuration register words to write to DDS chips prepare for a call to IOUpdate
  */
-void DDS::getConfigData() {
+void DDS_Config::getConfigData() {
 	sysClk = (uint16_t)(refClkMultiplier * DDS_OSC);
 	//Set the VCO for PLL based on the system clock
 	if (sysClk > 850 ) {VCO = 0x05;}
@@ -90,7 +91,7 @@ void DDS::getConfigData() {
 /*
 *PURPOSE: Gets 64 bit control word to send to DDS Board
 */
-uint64_t DDS::getProfileCMD(bool cs){
+uint64_t DDS_Config::getProfileCMD(bool cs){
 	uint64_t profData;
 	uint16_t truncASF = amplitude[cs] & 0x3FFF;
 	ftw[cs] = frequency2ftw(frequency[cs],sysClk);
@@ -105,7 +106,7 @@ uint64_t DDS::getProfileCMD(bool cs){
 /*
 *PURPOSE: When called for one DDS Resets all DDS's
 */
-void DDS::ResetDDS(){
+void DDS_Config::ResetDDS(){
 	AXI->reg[0] = 0x00100000; //Flips the reset bit high
 	AXI->reg[0] = 0x00000000; //Returns it to low
 }
@@ -113,19 +114,19 @@ void DDS::ResetDDS(){
 /*
 *PURPOSE: When called for one DDS, Resets the IOBuffer for all DDS's
 */
-void DDS::IOReset(){
+void DDS_Config::IOReset(){
 	AXI->reg[0] = 0x00010000; //Flip the IOreset bit high
 	AXI->reg[0] = 0x00000000; //Return it to low
 }
 
 
-void DDS::Write32(uint8_t Address, uint32_t Data){
+void DDS_Config::Write32(uint8_t Address, uint32_t Data){
 	uint32_t upperBits = AXI->reg[0] & 0xFFFFFD00; //Clear bit 9, and 0-7
 	AXI->reg[0] = upperBits | (Address & 0x7F) | (0x01 << 9); //Add 1 to bit 9 b/c it's a 32 bit register
 	AXI -> reg[1] = Data;
 }
 
-void DDS::Write64(uint8_t Address, uint64_t Data){
+void DDS_Config::Write64(uint8_t Address, uint64_t Data){
 	uint32_t upperBits = AXI->reg[0] & 0xFFFFFD00; //Clear bit 9, and 0-7
 	AXI->reg[0] = upperBits | (Address & 0x7F); //Replace bits 0-7
 
@@ -140,7 +141,7 @@ void DDS::Write64(uint8_t Address, uint64_t Data){
 *PURPOSE: Builds command to read a 32 bit register from DDS
 *NOTE: When serial start is active (bit 8) this function will populate reg[3] with the requested read. That's why it doesn't return anything
 */
-void DDS::Read32(uint8_t Address){
+void DDS_Config::Read32(uint8_t Address){
 	uint32_t upperBits = AXI->reg[0] & 0xFFFFFD00;
 	uint8_t truncAddress = (Address & 0x7F) | (0x01 << 7);
 	AXI->reg[0] = upperBits | truncAddress | (0x01 << 9);
@@ -151,7 +152,7 @@ void DDS::Read32(uint8_t Address){
 *
 *PURPOSE: Same as above, but with 64 bits. reg[3] (MSB) and reg[4] (LSB) are populated.
 */
-void DDS::Read64(uint8_t Address){
+void DDS_Config::Read64(uint8_t Address){
 	uint32_t upperBits = AXI->reg[0] & 0xFFFFFD00;
 	uint8_t truncAddress = (Address & 0x7F) | (0x01 << 7);
 	AXI->reg[0] = upperBits | truncAddress;
@@ -160,13 +161,13 @@ void DDS::Read64(uint8_t Address){
 /*
 *PURPOSE: Recalculates the system clock and outputs the actual output frequency with the given ftw
 */
-double DDS::GetActualFreq(uint32_t fword){
+double DDS_Config::GetActualFreq(uint32_t fword){
 	sysClk = (uint16_t)(refClkMultiplier * DDS_OSC);
 	return(ftw2frequency(fword,sysClk));
 }
 
 
-uint32_t DDS::frequency2ftw(float f, uint16_t sysClk) {
+uint32_t DDS_Config::frequency2ftw(float f, uint16_t sysClk) {
 	return (uint32_t)((double)(4294967296.0) * ((double)f/(double)sysClk));
 }
 
@@ -175,11 +176,11 @@ uint32_t DDS::frequency2ftw(float f, uint16_t sysClk) {
 *OUTPUT: The actual frequency output by DDS chip
 *NOTES: Formula from Page 22 of AD9910 Datasheet
 */
-double DDS::ftw2frequency(uint32_t ftw, uint16_t sysClk){
+double DDS_Config::ftw2frequency(uint32_t ftw, uint16_t sysClk){
 	return ((double)ftw/(double)(4294967296.0)) * (double)sysClk;
 }
 
-uint16_t DDS::phase2pow(float p){
+uint16_t DDS_Config::phase2pow(float p){
 	uint16_t po = (uint16_t)(((double)(65536.0)*(double)(p))/(double)(6.2831853));
 	return po;
 }

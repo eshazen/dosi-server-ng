@@ -17,7 +17,9 @@ ConfigCmdList.o: ConfigCmdList.cpp ConfigCmdList.hh ConfigCmd.hh DosiConfig.hh P
 ParseString.o: ParseString.cpp ParseString.hh
 DebugLog.o: DebugLog.cpp DebugLog.hh
 adc.o: adc.cpp adc.hh
-test_hw.o: test_hw.cpp DebugLog.hh adc.hh 
+gpio.o: gpio.cpp gpio.hh
+dds_config.o: dds_config.cpp dds_config.hh
+test_hw.o: test_hw.cpp DebugLog.hh adc.hh gpio.hh dds_config.hh
 
 test_TcpServer: TcpServer.o test_TcpServer.o DebugLog.o
 	g++ -o $@ $^
@@ -32,5 +34,5 @@ dosi_server: dosi_server.o TcpServer.o DebugLog.o ConfigCmd.o ConfigCmdList.o Do
              ParseString.o DOSI_HW.o
 	g++ -o $@ $^
 
-test_hw: test_hw.o DebugLog.o adc.o
+test_hw: test_hw.o DebugLog.o adc.o gpio.o dds_config.o
 	g++ -o $@ $^

@@ -14,6 +14,8 @@
 #define DDS_P0RT1 1	
 #define DDS_P0RT2 3
 
+const uint8_t DDS_OSC= 25; //Input clock to DDS
+
 class DDS_Config{
 	public:
 		DDS_Config(int uio);							//constructor 

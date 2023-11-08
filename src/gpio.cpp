@@ -2,7 +2,7 @@
 
 GPIO::GPIO(){
 	char UIDev[15];
-	sprint(UIDev, "/dev/uto%d", GPIO_PORT);
+	sprintf(UIDev, "/dev/uto%d", GPIO_PORT);
 	DebugLog::log( LOG_DEBUG, "%s\n", UIDev);
 	int fdUIO = open(UIDev, O_RDWR|O_SYNC);
 

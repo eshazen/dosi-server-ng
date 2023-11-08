@@ -2,8 +2,8 @@
 
 ADC::ADC(){
 	char UIDev[15];
+	sprintf(UIDev, "dev/uto%d", ADC_PORT);
 	DebugLog::log( LOG_DEBUG, "%s\n", UIDev);
-	fprintf(stderr,"%s\n", UIDev);
 	int fdUIO = open(UIDev, O_RDWR|O_SYNC);
 
 	//setup memory mapping
