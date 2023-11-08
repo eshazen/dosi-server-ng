@@ -10,9 +10,9 @@
 #include <unistd.h>
 #include "DebugLog.hh"
 
-#define DDS_P0RT0 0
-#define DDS_P0RT1 1	
-#define DDS_P0RT2 3
+#define DDS_PORT0 0
+#define DDS_PORT1 1	
+#define DDS_PORT2 3
 
 const uint8_t DDS_OSC= 25; //Input clock to DDS
 

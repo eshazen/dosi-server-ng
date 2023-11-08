@@ -7,9 +7,9 @@ class DDS_hl {
 	public:
 		DDS_hl();
 
-		DDS DDS0;
-		DDS DDS1;
-		DDS DDS2;
+		DDS_Config DDS0;
+		DDS_Config DDS1;
+		DDS_Config DDS2;
 		void configureBoards();
 		void updateFrequencies(float f1, float f2, float f3, float f4, float f5, float f6);
 		void updateFrequencies(float f1, float f2, float f3, float f4, float f5, float f6, uint32_t numSamps);
