@@ -3,10 +3,9 @@
 DDS_Config::DDS_Config(int uio){
 	Board = UIO;
 	if (UIO > 4 || UIO < 0) {
-		fprintf(stderr,"UIO must be between 0 and 4");
+		DebugLog::log( LOG_ERR, "UIO must be between 0 and 4");
 	}
 	char UIDev[15];
-	sprintf(UIDev, "/dev/uio%d",UIO);
 	DebugLog::log( LOG_DEBUG, "%s\n", UIDev);
 	int fdUIO = open(UIDev, O_RDWR|O_SYNC);
 	//setup memory mappings

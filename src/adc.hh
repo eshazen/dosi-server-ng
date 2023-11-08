@@ -6,6 +6,8 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <cstdint>
+
 #include "DebugLog.hh"
 
 #define ADC_PORT 2
@@ -39,7 +41,7 @@ class ADC{
 		void writeAXIRegister(uint8_t reg,uint32_t data); //write AXI register     
 		bool gainSerialDone();
 
-		virtual ~ADC()
+		virtual ~ADC();
 
 	private:
 		uint8_t extGainA;		//PGA870 gain for channel A

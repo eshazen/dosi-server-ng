@@ -3,7 +3,6 @@
 // these are placeholders
 
 #include "DOSI_HW.hh"
-#include "DebugLog.hh"
 
 DOSI_HW::DOSI_HW() {
   DebugLog::log( LOG_INFO, "DOSI_HW::DOSI_NW()\n");

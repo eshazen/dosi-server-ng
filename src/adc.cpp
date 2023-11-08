@@ -2,7 +2,7 @@
 
 ADC::ADC(){
 	char UIDev[15];
-	Debug::log( LOG_DEBUG, "%s\n", UIDev);
+	DebugLog::log( LOG_DEBUG, "%s\n", UIDev);
 	fprintf(stderr,"%s\n", UIDev);
 	int fdUIO = open(UIDev, O_RDWR|O_SYNC);
 
@@ -172,7 +172,7 @@ void ADC::setInternalGain(uint8_t igainA, uint8_t igainB){
 		intGainB = 0;
 		ADC::writeRegister(0x0C, 0x00);
 	} else {
-		intGainB = igainB
+		intGainB = igainB;
 		ADC::writeRegister(0x0C, (((intGainB & 0x1F) << 3) | //Set Gain
 			(0x01 << 2))); //enable channel B gain
 	}
@@ -209,7 +209,7 @@ bool ADC::gainSerialDone() {
  *       //               7 = 65536
  */
 void ADC::setCaptureLength(uint32_t inputLength) {
-	captureLength = inputLength
+	captureLength = inputLength;
 	if (captureLength <= 512) {capLenCode = 0;}
 	else if (captureLength <= 1024) {capLenCode = 1;}
 	else if (captureLength <= 2048) {capLenCode = 2;}

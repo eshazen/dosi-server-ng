@@ -1,4 +1,4 @@
-EXECS = test_TcpServer test_config test_DebugLog dosi_server
+EXECS = test_TcpServer test_config test_DebugLog dosi_server test_hw
 
 all: ${EXECS}
 
@@ -16,6 +16,8 @@ ConfigCmd.o: ConfigCmd.cpp ConfigCmd.hh DosiConfig.hh DOSI_HW.hh
 ConfigCmdList.o: ConfigCmdList.cpp ConfigCmdList.hh ConfigCmd.hh DosiConfig.hh ParseString.hh
 ParseString.o: ParseString.cpp ParseString.hh
 DebugLog.o: DebugLog.cpp DebugLog.hh
+adc.o: adc.cpp adc.hh
+test_hw.o: test_hw.cpp DebugLog.hh adc.hh 
 
 test_TcpServer: TcpServer.o test_TcpServer.o DebugLog.o
 	g++ -o $@ $^
@@ -28,4 +30,7 @@ test_DebugLog: test_DebugLog.o DebugLog.o
 
 dosi_server: dosi_server.o TcpServer.o DebugLog.o ConfigCmd.o ConfigCmdList.o DosiConfig.o \
              ParseString.o DOSI_HW.o
+	g++ -o $@ $^
+
+test_hw: test_hw.o DebugLog.o adc.o
 	g++ -o $@ $^

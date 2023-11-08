@@ -290,7 +290,7 @@ void DDS_hl::waitForSerialDone() {
 *        Dat1    // Same for DDS1
 *        Dat2    // Same for DDS2 
 */
-void DDS_hl::Read32(uint8_t Address, uint32_t* Dat0, uint32_t* Dat1, uint32_t* Dat2, bool cs){
+void DDS_hl::Read32(uint8_t Address, uint32_t *Dat0, uint32_t *Dat1, uint32_t *Dat2, bool cs){
 	setChipSelect(cs);
 	DDS0.Read32(Address);
 	DDS1.Read32(Address);
