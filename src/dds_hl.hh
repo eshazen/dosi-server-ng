@@ -6,10 +6,6 @@
 class DDS_hl {
 	public:
 		DDS_hl();
-
-		DDS_Config DDS0;
-		DDS_Config DDS1;
-		DDS_Config DDS2;
 		void configureBoards();
 		void updateFrequencies(float f1, float f2, float f3, float f4, float f5, float f6);
 		void updateFrequencies(float f1, float f2, float f3, float f4, float f5, float f6, uint32_t numSamps);
@@ -23,6 +19,11 @@ class DDS_hl {
 		void setChipSelect(bool cs);
 
 		virtual ~DDS_hl();
+
+	private:
+		DDS_Config DDS0;
+		DDS_Config DDS1;
+		DDS_Config DDS2;
 
 };
 #endif

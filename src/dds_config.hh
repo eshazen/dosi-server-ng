@@ -33,12 +33,13 @@ class DDS_Config{
 		bool serialDone();
 
 		virtual ~DDS_Config();
-
+	
 	private:
 		struct HW {               //AXI Registers
 			uint32_t reg[4];
 		};
 		volatile HW *AXI;         //Location of AXI registers
+		uint32_t CFR1, CFR2, CFR3;
 		float frequency[2];       //desired frequency
 		double actualFreq[2];     //Actual frequency output
 		float phase[2];           //Desired phase
@@ -49,7 +50,6 @@ class DDS_Config{
 		bool refClkDivider;       //I'm not sure what this does
 		uint8_t refClkMultiplier; //Multiplier for system clock
 		uint8_t Board;            //Board select
-		uint32_t CFR1, CFR2, CFR3;
 		uint64_t profileCMD;
 		bool sleep;               //If set high and written to CFR0, puts DDS to sleep
 		bool powerdown;           //If set high and written to CFR0, powers down DDS
